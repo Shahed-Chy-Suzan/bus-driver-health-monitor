@@ -3,8 +3,8 @@
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="false"
-      absolute
-      temporary
+      fixed
+      clipped
       app
     >
       <v-list>
