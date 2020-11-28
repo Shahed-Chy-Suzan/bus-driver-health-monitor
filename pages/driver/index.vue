@@ -25,7 +25,7 @@
               v-bind="attrs"
               v-on="on"
             >
-              New Item
+              New Driver
             </v-btn>
           </template>
           <v-card>
@@ -183,7 +183,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'New Driver' : 'Edit Driver'
       },
     },
 
