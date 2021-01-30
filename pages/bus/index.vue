@@ -148,12 +148,6 @@ export default {
   }),
 
   computed: {
-    // ...mapGetters({
-    //   // bus: "bus/getBus",
-    //   // busLists: "bus/getBuses",
-    //   // busesMeta: "bus/getBusesMeta"
-    // }),
-
     formTitle() {
       return this.editedIndex === -1 ? "New Bus" : "Edit Bus";
     },
