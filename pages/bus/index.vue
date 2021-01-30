@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 
 export default {
   data: () => ({
@@ -148,11 +148,11 @@ export default {
   }),
 
   computed: {
-    ...mapGetters({
-      bus: "bus/getBus",
-      busLists: "bus/getBuses",
-      busesMeta: "bus/getBusesMeta"
-    }),
+    // ...mapGetters({
+    //   // bus: "bus/getBus",
+    //   // busLists: "bus/getBuses",
+    //   // busesMeta: "bus/getBusesMeta"
+    // }),
 
     formTitle() {
       return this.editedIndex === -1 ? "New Bus" : "Edit Bus";
@@ -181,19 +181,19 @@ export default {
       },
       immediate: true,
       deep: true
-    },
+    }
   },
 
   created() {
-    // this.initialize()
+    this.initialize();
   },
 
   methods: {
-    initialize(query) {
+    initialize() {
       this.$axios
         .get("bus")
         .then(response => {
-          this.buses = response.data
+          this.buses = response.data;
         })
         .catch(error => {
           this.$toast.error(error.response.data.message);
@@ -213,17 +213,20 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.$store
-        .dispatch("bus/deleteBus", this.editedItem.id)
+      this.$axios
+        .delete("/bus/" + this.editedItem.id)
+        // this.$store
+        //   .dispatch("bus/deleteBus", this.editedItem.id)
         .then(response => {
           this.$toast.success("Data has been Deleted");
-
+          console.log('hello');
           this.buses.splice(this.editedIndex, 1);
         })
         .catch(error => {
           this.$toast.error(error.response.data.message);
         })
         .finally(() => {
+          this.initialize();
           this.closeDelete();
         });
     },
@@ -247,23 +250,33 @@ export default {
 
     save() {
       if (this.$refs.form.validate()) {
-        this.$store
-          .dispatch("bus/saveBus", this.editedItem)
-          .then(response => {
-            if (this.editedIndex > -1) {
-              this.$toast.success("Data has been Updated");
-              Object.assign(this.buses[this.editedIndex], response);
-            } else {
-              this.$toast.success("Data has been saved");
-              this.buses.push(response);
-            }
-            this.close();
-          })
-          .catch(error => {
-            // this.setErrorMessages(error.response.data.errors)
-            // this.$toast.error(error.response.data.message)
-            console.log(error.response.data.message);
-          });
+        if (this.editedIndex > -1) {
+          this.$axios
+            .put('/bus/' + this.editedItem.id, this.editedItem)
+            .then((response) => {
+              // this.$toast.success("Data has been Updated");
+                Object.assign(this.buses[this.editedIndex], this.editedItem);
+                this.close();
+            })
+            .catch(error => {
+              // this.setErrorMessages(error.response.data.errors)
+              // this.$toast.error(error.response.data.message)
+              console.log(error);
+            })
+        } else {
+          this.$axios
+            .post('/bus', this.editedItem)
+            .then((response) => {
+              // this.$toast.success("Data has been saved");
+                this.buses.push(response.data.data);
+                this.close();
+            })
+            .catch(error => {
+              // this.setErrorMessages(error.response.data.errors)
+              // this.$toast.error(error.response.data.message)
+              console.log(error);
+            })
+        }
       } else {
         this.$toast.error("Please filled all required fields");
       }
