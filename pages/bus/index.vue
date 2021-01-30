@@ -120,7 +120,7 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "Driver ID",
+        text: "ID",
         align: "start",
         sortable: false,
         value: "id"
