@@ -87,14 +87,24 @@ export default {
         },
         {
           icon: 'mdi-apps',
-          title: 'Bus Driver',
+          title: 'Assign Bus-Driver',
           to: '/bus-driver'
         },
         {
           icon: 'mdi-apps',
           title: 'Bus Driver Log',
           to: '/bus-driver-log'
-        }
+        },
+        // {
+        //   icon: 'mdi-apps',
+        //   title: 'Bus Service Log',
+        //   to: '/bus-service-log'
+        // },
+        {
+          icon: 'mdi-bell-ring',
+          title: 'Notification',
+          to: '/notification'
+        },
       ],
       miniVariant: false,
       right: true,
