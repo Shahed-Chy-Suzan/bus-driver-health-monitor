@@ -1,19 +1,19 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="drivers"
+    :items="buses"
     sort-by="calories"
     class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar flat class="grey lighten-3">
-        <v-toolbar-title>Driver</v-toolbar-title>
+        <v-toolbar-title>Bus</v-toolbar-title>
 
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-              New Driver
+              New Bus
             </v-btn>
           </template>
           <v-card>
@@ -27,40 +27,32 @@
                   <v-row dense>
                     <v-col cols="12" md="6">
                       <v-text-field
-                        v-model="editedItem.driver_name"
-                        label="Driver name"
+                        v-model="editedItem.name"
+                        label="Bus name"
                         outlined
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-text-field
-                        v-model="editedItem.license"
-                        label="License no"
+                        v-model="editedItem.plate_no"
+                        label="Bus plate no"
                         outlined
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-text-field
-                        v-model="editedItem.phone"
-                        label="Phone"
+                        v-model="editedItem.owner"
+                        label="Owner name"
                         outlined
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-text-field
-                        v-model="editedItem.experience_year"
-                        label="Experience year"
-                        outlined
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.address"
-                        label="Address"
+                        v-model="editedItem.duty_date"
+                        label="Duty date"
                         outlined
                         hide-details="auto"
                       ></v-text-field>
@@ -133,34 +125,31 @@ export default {
         sortable: false,
         value: "id"
       },
-      { text: "Driver name", value: "driver_name" },
-      { text: "License no", value: "license" },
-      { text: "Address", value: "address" },
-      { text: "Phone", value: "phone" },
-      { text: "Experience year", value: "experience_year" },
+      { text: "Bus name", value: "name" },
+      { text: "Bus plate no", value: "plate_no" },
+      { text: "Owner name", value: "owner" },
+      { text: "Duty date", value: "duty_date" },
       { text: "Actions", value: "actions", sortable: false }
     ],
     editedIndex: -1,
     editedItem: {
-      driver_name: "",
-      license: "",
-      address: "",
-      phone: "",
-      experience_year: "",
+      name: "",
+      plate_no: "",
+      owner: "",
+      duty_date: ""
     },
     defaultItem: {
-      driver_name: "",
-      license: "",
-      address: "",
-      phone: "",
-      experience_year: "",
+      name: "",
+      plate_no: "",
+      owner: "",
+      duty_date: ""
     },
-    drivers: []
+    buses: []
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Driver" : "Edit Driver";
+      return this.editedIndex === -1 ? "New Bus" : "Edit Bus";
     },
 
     searchQuery() {
@@ -196,9 +185,9 @@ export default {
   methods: {
     initialize() {
       this.$axios
-        .get("driver")
+        .get("bus")
         .then(response => {
-          this.drivers = response.data;
+          this.buses = response.data;
         })
         .catch(error => {
           this.$toast.error(error.response.data.message);
@@ -206,24 +195,26 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.drivers.indexOf(item);
+      this.editedIndex = this.buses.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.drivers.indexOf(item);
+      this.editedIndex = this.buses.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
       this.$axios
-        .delete("/driver/" + this.editedItem.id)
+        .delete("/bus/" + this.editedItem.id)
+        // this.$store
+        //   .dispatch("bus/deleteBus", this.editedItem.id)
         .then(response => {
           this.$toast.success("Data has been Deleted");
-          console.log("hello");
-          this.drivers.splice(this.editedIndex, 1);
+          console.log('hello');
+          this.buses.splice(this.editedIndex, 1);
         })
         .catch(error => {
           this.$toast.error(error.response.data.message);
@@ -255,30 +246,30 @@ export default {
       if (this.$refs.form.validate()) {
         if (this.editedIndex > -1) {
           this.$axios
-            .put("/driver/" + this.editedItem.id, this.editedItem)
-            .then(response => {
+            .put('/bus/' + this.editedItem.id, this.editedItem)
+            .then((response) => {
               // this.$toast.success("Data has been Updated");
-              Object.assign(this.drivers[this.editedIndex], this.editedItem);
-              this.close();
+                Object.assign(this.buses[this.editedIndex], this.editedItem);
+                this.close();
             })
             .catch(error => {
               // this.setErrorMessages(error.response.data.errors)
               // this.$toast.error(error.response.data.message)
               console.log(error);
-            });
+            })
         } else {
           this.$axios
-            .post("/driver", this.editedItem)
-            .then(response => {
+            .post('/bus', this.editedItem)
+            .then((response) => {
               // this.$toast.success("Data has been saved");
-              this.drivers.push(response.data.data);
-              this.close();
+                this.buses.push(response.data.data);
+                this.close();
             })
             .catch(error => {
               // this.setErrorMessages(error.response.data.errors)
               // this.$toast.error(error.response.data.message)
               console.log(error);
-            });
+            })
         }
       } else {
         this.$toast.error("Please filled all required fields");

@@ -1,19 +1,19 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="drivers"
+    :items="busDrivers"
     sort-by="calories"
     class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar flat class="grey lighten-3">
-        <v-toolbar-title>Driver</v-toolbar-title>
+        <v-toolbar-title>Assigned Bus-Driver</v-toolbar-title>
 
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-              New Driver
+              New Bus-Driver
             </v-btn>
           </template>
           <v-card>
@@ -25,45 +25,49 @@
               <v-form ref="form">
                 <v-container>
                   <v-row dense>
-                    <v-col cols="12" md="6">
-                      <v-text-field
+                    <v-col cols="12" md="12">
+                      <v-select
                         v-model="editedItem.driver_name"
-                        label="Driver name"
+                        :items="drivers"
+                        item-text="driver_name"
+                        item-value="id"
+                        return="id"
                         outlined
                         hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="editedItem.license"
-                        label="License no"
-                        outlined
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="editedItem.phone"
-                        label="Phone"
-                        outlined
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="editedItem.experience_year"
-                        label="Experience year"
-                        outlined
-                        hide-details="auto"
-                      ></v-text-field>
+                        label="Driver License"
+                      />
                     </v-col>
                     <v-col cols="12" md="12">
+                      <v-select
+                        v-model="editedItem.plate_no"
+                        :items="buses"
+                        item-text="plate_no"
+                        item-value="id"
+                        return="id"
+                        outlined
+                        hide-details="auto"
+                        label="Bus plate no"
+                      />
+                    </v-col>
+                    <v-col cols="12" md="6">
                       <v-text-field
-                        v-model="editedItem.address"
-                        label="Address"
+                        v-model="editedItem.startDate"
+                        label="Start Date"
                         outlined
                         hide-details="auto"
                       ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
+                      <v-select
+                        v-model="editedItem.status"
+                        outlined
+                        hide-details="auto"
+                        :items="statuses"
+                        label="Status"
+                      />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -103,6 +107,16 @@
       </v-toolbar>
     </template>
 
+    <template v-slot:item.status="{ item }">
+      <v-chip
+        :color="getColor(item.status)"
+        dark
+        small
+      >
+        {{ item.status }}
+      </v-chip>
+    </template>
+
     <template v-slot:item.actions="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">
         mdi-pencil
@@ -120,47 +134,45 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
-
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: "ID",
+        text: "Driver Id",
         align: "start",
-        sortable: false,
-        value: "id"
+        value: "driverId"
       },
       { text: "Driver name", value: "driver_name" },
-      { text: "License no", value: "license" },
-      { text: "Address", value: "address" },
-      { text: "Phone", value: "phone" },
-      { text: "Experience year", value: "experience_year" },
+      { text: "Bus plate no", value: "plate_no" },
+      { text: "Bus name", value: "name" },
+      { text: "Status", value: "status" },
+      { text: "Start Date", value: "startDate" },
       { text: "Actions", value: "actions", sortable: false }
     ],
     editedIndex: -1,
     editedItem: {
-      driver_name: "",
-      license: "",
-      address: "",
-      phone: "",
-      experience_year: "",
+      driver_name: null,
+      plate_no: null,
+      startDate: null,
+      status: null
     },
     defaultItem: {
-      driver_name: "",
-      license: "",
-      address: "",
-      phone: "",
-      experience_year: "",
+      driver_name: null,
+      plate_no: null,
+      startDate: null,
+      status: null
     },
-    drivers: []
+    statuses: ['Safe', 'Danger'],
+    busDrivers: [],
+    drivers:[],
+    buses:[],
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Driver" : "Edit Driver";
+      return this.editedIndex === -1 ? "New Bus-Driver" : "Edit Bus-Driver";
     },
 
     searchQuery() {
@@ -191,14 +203,16 @@ export default {
 
   created() {
     this.initialize();
+    this.getDriverLicense();
+    this.getBusPlateNo();
   },
 
   methods: {
     initialize() {
       this.$axios
-        .get("driver")
+        .get("/bus-driver")
         .then(response => {
-          this.drivers = response.data;
+          this.busDrivers = response.data;
         })
         .catch(error => {
           this.$toast.error(error.response.data.message);
@@ -206,24 +220,23 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.drivers.indexOf(item);
+      this.editedIndex = this.busDrivers.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.drivers.indexOf(item);
+      this.editedIndex = this.busDrivers.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
       this.$axios
-        .delete("/driver/" + this.editedItem.id)
+        .delete("/bus-driver/" + this.editedItem.id)
         .then(response => {
           this.$toast.success("Data has been Deleted");
-          console.log("hello");
-          this.drivers.splice(this.editedIndex, 1);
+          this.busDrivers.splice(this.editedIndex, 1);
         })
         .catch(error => {
           this.$toast.error(error.response.data.message);
@@ -255,34 +268,54 @@ export default {
       if (this.$refs.form.validate()) {
         if (this.editedIndex > -1) {
           this.$axios
-            .put("/driver/" + this.editedItem.id, this.editedItem)
-            .then(response => {
+            .put('/bus-driver/' + this.editedItem.id, this.editedItem)
+            .then((response) => {
               // this.$toast.success("Data has been Updated");
-              Object.assign(this.drivers[this.editedIndex], this.editedItem);
-              this.close();
+                Object.assign(this.busDrivers[this.editedIndex], this.editedItem);
+                this.initialize();
+                this.close();
             })
             .catch(error => {
               // this.setErrorMessages(error.response.data.errors)
               // this.$toast.error(error.response.data.message)
               console.log(error);
-            });
+            })
         } else {
           this.$axios
-            .post("/driver", this.editedItem)
-            .then(response => {
+            .post('/bus-driver', this.editedItem)
+            .then((response) => {
               // this.$toast.success("Data has been saved");
-              this.drivers.push(response.data.data);
-              this.close();
+                this.busDrivers.push(response.data.data);
+                this.initialize();
+                this.close();
             })
             .catch(error => {
               // this.setErrorMessages(error.response.data.errors)
               // this.$toast.error(error.response.data.message)
-              console.log(error);
-            });
+              console.log(error.response.data)
+              console.error(error.response.data)
+            })
         }
       } else {
         this.$toast.error("Please filled all required fields");
       }
+    },
+
+    getColor (status) {
+      if (status === 'Safe') { return 'primary' } else { return 'red' }
+    },
+
+    getDriverLicense(){
+      this.$axios.get('/driver')
+      .then(response => {
+        this.drivers = response.data;
+      })
+    },
+    getBusPlateNo(){
+      this.$axios.get('/bus')
+      .then(response => {
+        this.buses = response.data;
+      })
     }
   }
 };
