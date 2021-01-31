@@ -76,12 +76,12 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
+          icon: 'mdi-bus',
           title: 'Bus',
           to: '/bus'
         },
         {
-          icon: 'mdi-apps',
+          icon: 'mdi-account',
           title: 'Driver',
           to: '/driver'
         },
@@ -89,6 +89,11 @@ export default {
           icon: 'mdi-apps',
           title: 'Bus Driver',
           to: '/bus-driver'
+        },
+        {
+          icon: 'mdi-apps',
+          title: 'Bus Driver Log',
+          to: '/bus-driver-log'
         }
       ],
       miniVariant: false,
