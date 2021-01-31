@@ -57,12 +57,16 @@
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="12" md="6" lg="6">
-                      <v-switch
-                        v-model="editedItem.isActive"
-                        color="primary"
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
+                      <v-select
+                        v-model="editedItem.status"
+                        outlined
                         hide-details="auto"
-                        label="Safe"
+                        :items="statuses"
+                        label="Status"
                       />
                     </v-col>
                   </v-row>
@@ -103,13 +107,13 @@
       </v-toolbar>
     </template>
 
-    <template v-slot:item.isActive="{ item }">
+    <template v-slot:item.status="{ item }">
       <v-chip
-        :color="parseInt(item.isActive) ? 'success' : 'red' "
+        :color="getColor(item.status)"
         dark
         small
       >
-      {{ parseInt(item.isActive) ? 'Safe' : 'Danger' }}
+        {{ item.status }}
       </v-chip>
     </template>
 
@@ -138,13 +142,12 @@ export default {
       {
         text: "Driver Id",
         align: "start",
-        sortable: false,
         value: "driverId"
       },
       { text: "Driver name", value: "driver_name" },
       { text: "Bus plate no", value: "plate_no" },
       { text: "Bus name", value: "name" },
-      { text: "Status", value: "isActive" },
+      { text: "Status", value: "status" },
       { text: "Start Date", value: "startDate" },
       { text: "Actions", value: "actions", sortable: false }
     ],
@@ -153,14 +156,15 @@ export default {
       driver_name: null,
       plate_no: null,
       startDate: null,
-      isActive: null
+      status: null
     },
     defaultItem: {
       driver_name: null,
       plate_no: null,
       startDate: null,
-      isActive: null
+      status: null
     },
+    statuses: ['Safe', 'Danger'],
     busDrivers: [],
     drivers:[],
     buses:[],
@@ -206,7 +210,7 @@ export default {
   methods: {
     initialize() {
       this.$axios
-        .get("bus-driver")
+        .get("/bus-driver")
         .then(response => {
           this.busDrivers = response.data;
         })
@@ -232,7 +236,6 @@ export default {
         .delete("/bus-driver/" + this.editedItem.id)
         .then(response => {
           this.$toast.success("Data has been Deleted");
-          console.log('hello');
           this.busDrivers.splice(this.editedIndex, 1);
         })
         .catch(error => {
@@ -269,6 +272,7 @@ export default {
             .then((response) => {
               // this.$toast.success("Data has been Updated");
                 Object.assign(this.busDrivers[this.editedIndex], this.editedItem);
+                this.initialize();
                 this.close();
             })
             .catch(error => {
@@ -282,17 +286,23 @@ export default {
             .then((response) => {
               // this.$toast.success("Data has been saved");
                 this.busDrivers.push(response.data.data);
+                this.initialize();
                 this.close();
             })
             .catch(error => {
               // this.setErrorMessages(error.response.data.errors)
               // this.$toast.error(error.response.data.message)
-              console.log(error);
+              console.log(error.response.data)
+              console.error(error.response.data)
             })
         }
       } else {
         this.$toast.error("Please filled all required fields");
       }
+    },
+
+    getColor (status) {
+      if (status === 'Safe') { return 'primary' } else { return 'red' }
     },
 
     getDriverLicense(){
