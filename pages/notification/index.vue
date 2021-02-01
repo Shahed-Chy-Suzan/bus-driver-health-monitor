@@ -149,8 +149,9 @@ export default {
   methods: {
     initialize() {
       this.$axios
-        .get("notification")
+        .get("/notification")
         .then(response => {
+          console.log(response)
           this.notifications = response.data;
         })
         .catch(error => {

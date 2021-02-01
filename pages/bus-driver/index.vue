@@ -164,7 +164,7 @@ export default {
       startDate: null,
       status: null
     },
-    statuses: ['Safe', 'Danger'],
+    statuses: ['On duty', 'Off duty'],
     busDrivers: [],
     drivers:[],
     buses:[],
@@ -270,28 +270,28 @@ export default {
           this.$axios
             .put('/bus-driver/' + this.editedItem.id, this.editedItem)
             .then((response) => {
-              // this.$toast.success("Data has been Updated");
+              this.$toast.success("Data has been Updated");
                 Object.assign(this.busDrivers[this.editedIndex], this.editedItem);
                 this.initialize();
                 this.close();
             })
             .catch(error => {
               // this.setErrorMessages(error.response.data.errors)
-              // this.$toast.error(error.response.data.message)
+              this.$toast.error(error.response.data.message)
               console.log(error);
             })
         } else {
           this.$axios
             .post('/bus-driver', this.editedItem)
             .then((response) => {
-              // this.$toast.success("Data has been saved");
+              this.$toast.success("Data has been saved");
                 this.busDrivers.push(response.data.data);
                 this.initialize();
                 this.close();
             })
             .catch(error => {
               // this.setErrorMessages(error.response.data.errors)
-              // this.$toast.error(error.response.data.message)
+              this.$toast.error(error.response.data.message)
               console.log(error.response.data)
               console.error(error.response.data)
             })

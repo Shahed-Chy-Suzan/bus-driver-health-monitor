@@ -51,6 +51,14 @@
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-text-field
+                        v-model="editedItem.channel"
+                        label="Device Id"
+                        outlined
+                        hide-details="auto"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-text-field
                         v-model="editedItem.duty_date"
                         label="Duty date"
                         outlined
@@ -126,6 +134,7 @@ export default {
         value: "id"
       },
       { text: "Bus name", value: "name" },
+      { text: "Device Id", value: "channel" },
       { text: "Bus plate no", value: "plate_no" },
       { text: "Owner name", value: "owner" },
       { text: "Duty date", value: "duty_date" },
@@ -136,13 +145,15 @@ export default {
       name: "",
       plate_no: "",
       owner: "",
-      duty_date: ""
+      duty_date: "",
+      channel: ''
     },
     defaultItem: {
       name: "",
       plate_no: "",
       owner: "",
-      duty_date: ""
+      duty_date: "",
+      channel: ''
     },
     buses: []
   }),
@@ -248,26 +259,26 @@ export default {
           this.$axios
             .put('/bus/' + this.editedItem.id, this.editedItem)
             .then((response) => {
-              // this.$toast.success("Data has been Updated");
+              this.$toast.success("Data has been Updated");
                 Object.assign(this.buses[this.editedIndex], this.editedItem);
                 this.close();
             })
             .catch(error => {
               // this.setErrorMessages(error.response.data.errors)
-              // this.$toast.error(error.response.data.message)
+              this.$toast.error(error.response.data.message)
               console.log(error);
             })
         } else {
           this.$axios
             .post('/bus', this.editedItem)
             .then((response) => {
-              // this.$toast.success("Data has been saved");
+              this.$toast.success("Data has been saved");
                 this.buses.push(response.data.data);
                 this.close();
             })
             .catch(error => {
               // this.setErrorMessages(error.response.data.errors)
-              // this.$toast.error(error.response.data.message)
+              this.$toast.error(error.response.data.message)
               console.log(error);
             })
         }
