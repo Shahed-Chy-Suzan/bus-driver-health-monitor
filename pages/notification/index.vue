@@ -94,10 +94,17 @@ export default {
     dialog: false,
     headers: [
       { text: "Driver name", value: "driver_name" },
-      { text: "Current Situation", value: "status" },
       { text: "Driver License", value: "license" },
       { text: "Bus name", value: "name" },
       { text: "Bus plate no", value: "plate_no" },
+      { text: "Channel", value: "channel" },
+      { text: "Pulse", value: "pulse" },
+      { text: "Oxyzen", value: "oxygen" },
+      { text: "Temperature", value: "temperature" },
+      { text: "Emergency Button", value: "emergency_button" },
+      { text: "Robery Button", value: "robery_button" },
+      { text: "Latitude", value: "latitude" },
+      { text: "Lomgitude", value: "longitude" },
       { text: "Actions", value: "actions", sortable: false }
     ],
     editedIndex: -1,
