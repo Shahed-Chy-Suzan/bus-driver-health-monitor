@@ -40,12 +40,17 @@ export default {
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
     // https://go.nuxtjs.dev/pwa
-    "@nuxtjs/pwa"
+    "@nuxtjs/pwa",
+    ['vue-toastification/nuxt', {
+      timeout: 2000,
+      draggable: true,
+      closeOnClick: true
+    }]
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: "http://localhost:8000/api/"
+    baseURL: "http://bus-driver-health-monitoring.test/api/"
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
