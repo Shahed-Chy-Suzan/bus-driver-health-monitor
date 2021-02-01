@@ -93,11 +93,11 @@ export default {
   data: () => ({
     dialog: false,
     headers: [
+      { text: "Channel", value: "channel" },
       { text: "Driver name", value: "driver_name" },
       { text: "Driver License", value: "license" },
       { text: "Bus name", value: "name" },
       { text: "Bus plate no", value: "plate_no" },
-      { text: "Channel", value: "channel" },
       { text: "Pulse", value: "pulse" },
       { text: "Oxyzen", value: "oxygen" },
       { text: "Temperature", value: "temperature" },
@@ -156,7 +156,7 @@ export default {
   methods: {
     initialize() {
       this.$axios
-        .get("/notification")
+        .get("/notification" + `?channel=1293855`)
         .then(response => {
           console.log(response)
           this.notifications = response.data;
