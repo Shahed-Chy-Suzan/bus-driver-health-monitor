@@ -93,6 +93,8 @@ export default {
   data: () => ({
     dialog: false,
     headers: [
+      { text: "Date", value: "date" },
+      { text: "Id", value: "entry_id" },
       { text: "Channel", value: "channel" },
       { text: "Driver name", value: "driver_name" },
       { text: "Driver License", value: "license" },
@@ -105,7 +107,7 @@ export default {
       { text: "Robery Button", value: "robery_button" },
       { text: "Latitude", value: "latitude" },
       { text: "Lomgitude", value: "longitude" },
-      { text: "Actions", value: "actions", sortable: false }
+      // { text: "Actions", value: "actions", sortable: false }
     ],
     editedIndex: -1,
     editedItem: {
