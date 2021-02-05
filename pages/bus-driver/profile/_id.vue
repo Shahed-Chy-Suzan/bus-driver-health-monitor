@@ -88,14 +88,16 @@
                                 :expanded.sync="expanded"
                                 item-key="id"
                                 show-expand
+                                sort-by="entry_id"
+                                :sort-desc="true"
                             >
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <td :colspan="headers.length" class="pa-0">
-                                       <MapsCard class="ma-5" :latitude="item.latitude" :longitude="item.longitude" />
+                                       <MapsCard class="ma-5" :driver="item" />
                                     </td>
                                 </template>
-                            
-                                <!-- <template #item.data-table-expand="{ headers, item }">
+<!--                             
+                                <template #item.data-table-expand="{ headers, item }">
                                     <v-btn small color="primary">
                                         view on map
                                     </v-btn>

@@ -43,16 +43,8 @@ export default {
   name: 'GoogleMap',
 
   props: {
-    latitude: {
-      type: [String, Number],
-      required: false,
-      default() {
-        return 0.0
-      }
-    },
-
-    longitude: {
-      type: [String, Number],
+    driver: {
+      type: Object,
       required: false,
       default() {
         return 0.0
@@ -65,9 +57,7 @@ export default {
     return {
       center: { lat: 23.685, lng: 90.3563 },
       markers: [],
-      zoom: 7,
-      properties: [],
-      pmsData: {},
+      zoom: 12,
       infoOptions: {
         content: '',
         //optional: offset infowindow so it visually sits nicely on top of our marker
@@ -81,6 +71,18 @@ export default {
       currentMidx: null,
     }
   },
+
+  watch: {
+    driver: {
+      handler(nv, ov) {
+        this.addMarker()
+      },
+
+      immediate: true,
+      deep: true
+    }
+  },
+
   computed: {
     google: gmapApi
   },
@@ -91,24 +93,32 @@ export default {
       this.markers = []
   
       const marker = {
-        lat: parseFloat(this.latitude),
-        lng: parseFloat(this.longitude),
+        lat: parseFloat(this.driver.latitude),
+        lng: parseFloat(this.driver.longitude),
       }
+
       this.markers.push({ 
-        position: marker,
-        icon: {
-            url: iconUrl,
-            scaledSize: {width: 40, height: 75},
-            labelOrigin: {x: 20, y: 60}
-        },
-        labelContent: {
-          text: 'Driver Location',
-          color: "#eb3a44",
-          fontSize: "16px",
-          fontWeight: "bold",
-        },
-        title: 'Driver Location',
-      })
+          position: marker,
+
+          icon: {
+              url: iconUrl,
+              scaledSize: {width: 40, height: 75},
+              labelOrigin: {x: 20, y: 60}
+          },
+
+          labelContent: {
+            text: this.driver.driver_name,
+            color: "#eb3a44",
+            fontSize: "16px",
+            fontWeight: "bold",
+          },
+
+          title: this.driver.driver_name,
+          infoText: '<h2 style="color: #eb3a44">Driver: <strong>' + this.driver.driver_name +'</strong></h2>'
+            + '<br>' + '<h4 style="margin-top: -5px">Bus: <strong>'+ this.driver.name +'</strong></h4>'
+            + '<br>' + '<h4  style="margin-top: -10px"> Bus No: '+ this.driver.plate_no +'</h4>'
+        })
+
       this.center = marker
 
       this.geolocate()
