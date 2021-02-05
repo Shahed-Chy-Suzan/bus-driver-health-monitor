@@ -53,8 +53,7 @@ export default {
       { text: "Bus name", value: "name" },
       { text: "Bus plate no", value: "plate_no" },
       { text: "Start Date", value: "startDate" },
-      { text: "End Date", value: "endDate" },
-      { text: "Actions", value: "actions", sortable: false }
+      { text: "End Date", value: "endDate" }
     ],
 
     editedIndex: -1,

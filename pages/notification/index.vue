@@ -63,6 +63,10 @@
       </v-toolbar>
     </template>
 
+    <template v-slot:item.date="{ item }">
+        {{formatDate(item.date) }}
+    </template>
+
     <template v-slot:item.status="{ item }">
       <v-chip
         color= 'red'

@@ -72,6 +72,7 @@
                         </v-card-text>
                     </v-card>
                 </v-col>
+
                  <v-col cols="12">
                     <v-card outlined>
                         <v-card-title class="pa-3 primary white--text">
@@ -79,29 +80,41 @@
                         </v-card-title>
 
                         <v-card-text>
-                        <v-data-table
-                            flat
-                            :headers="headers"
-                            :items="notifications"
-                            class=""
-                        >
-                        
-                            <template v-slot:item.status="{ item }">
-                                <v-chip
-                                    color= 'red'
-                                    dark
-                                    small
-                                >
-                                    {{ item.status }}
-                                </v-chip>
-                            </template>
+                            <v-data-table
+                                flat
+                                :headers="headers"
+                                :items="notifications"
+                                :single-expand="singleExpand"
+                                :expanded.sync="expanded"
+                                item-key="id"
+                                show-expand
+                            >
+                                <template v-slot:expanded-item="{ headers, item }">
+                                    <td :colspan="headers.length" class="pa-0">
+                                       <MapsCard class="ma-5" :latitude="item.latitude" :longitude="item.longitude" />
+                                    </td>
+                                </template>
+                            
+                                <!-- <template #item.data-table-expand="{ headers, item }">
+                                    <v-btn small color="primary">
+                                        view on map
+                                    </v-btn>
+                                </template> -->
+                            
+                                <template v-slot:item.status="{ item }">
+                                    <v-chip
+                                        color= 'red'
+                                        dark
+                                        small
+                                    >
+                                        {{ item.status }}
+                                    </v-chip>
+                                </template>
 
-                            <template v-slot:item.actions="{ item }">
-                                <v-btn small color="primary">
-                                    view on map
-                                </v-btn>
-                            </template>
-                        </v-data-table>
+                                <template v-slot:item.date="{ item }">
+                                    {{formatDate(item.date) }}
+                                </template>
+                            </v-data-table>
                         </v-card-text>
                     </v-card>
                 </v-col>
@@ -110,11 +123,20 @@
     </div>
 </template>
 <script>
+import MapsCard from '@/components/Maps'
+
 export default {
+    components: {
+        MapsCard
+    },
+
     data() {
         return {
+            showMap: false,
             driver: {},
             notifications: [],
+            expanded: [],
+            singleExpand: false,
             headers: [
                 { text: "Date", value: "date" },
                 { text: "Id", value: "entry_id" },
@@ -128,7 +150,7 @@ export default {
                 { text: "Robery Button", value: "robery_button" },
                 { text: "Latitude", value: "latitude" },
                 { text: "Lomgitude", value: "longitude" },
-                { text: "Actions", value: "actions", sortable: false }
+                { text: '', value: 'data-table-expand', sortable: false },
                 ],
         }
     },
