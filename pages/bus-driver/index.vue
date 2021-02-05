@@ -39,14 +39,14 @@
                     </v-col>
                     <v-col cols="12" md="12">
                       <v-select
-                        v-model="editedItem.plate_no"
+                        v-model="editedItem.channel"
                         :items="buses"
-                        item-text="plate_no"
-                        item-value="id"
-                        return="id"
+                        item-text="channel"
+                        item-value="channel"
+                        return="channel"
                         outlined
                         hide-details="auto"
-                        label="Bus plate no"
+                        label="Bus Device Id"
                       />
                     </v-col>
                     <v-col cols="12" md="6">
@@ -170,13 +170,15 @@ export default {
     editedIndex: -1,
     editedItem: {
       driver_name: null,
-      plate_no: null,
+      plate_no: 1,
+      channel: null,
       startDate: null,
       driving_status: null
     },
     defaultItem: {
       driver_name: null,
       plate_no: null,
+      channel: null,
       startDate: null,
       driving_status: null
     },
@@ -327,7 +329,7 @@ export default {
          return 'success' 
         }
       else if(status === 'moderate') { 
-          return 'yellow' 
+          return 'yellow darken-3' 
         } 
       else {
         return 'danger'
