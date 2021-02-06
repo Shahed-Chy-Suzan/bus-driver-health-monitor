@@ -121,7 +121,8 @@ export default {
       status: "",
     },
     notifications: [],
-    statuses: ['Safe', 'Danger']
+    statuses: ['Safe', 'Danger'],
+    dialogDelete: false
   }),
 
   computed: {
