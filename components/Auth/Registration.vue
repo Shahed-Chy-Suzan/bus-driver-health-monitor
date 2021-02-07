@@ -72,7 +72,7 @@
           :loading="isLoading"
           @click="login()"
         >
-          Sign in
+          Sign up
         </v-btn>
         <v-spacer />
       </v-card-actions>
@@ -168,8 +168,9 @@ export default {
       } else {
         this.resetValidation()
 
-        this.$store.dispatch('auth/postLogin', this.loginInfo)
+        this.$store.dispatch('auth/signup', this.loginInfo)
           .then((response) => {
+            this.$toast.success("Registration Successful!");
             this.goToSourceDestination()
           })
           // eslint-disable-next-line handle-callback-err

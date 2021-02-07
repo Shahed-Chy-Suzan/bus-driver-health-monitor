@@ -148,31 +148,31 @@ export default {
 
     login () {
       this.isLoading = true
-      this.$router.push('/')
-      // if (!this.$refs.form.validate()) {
-      //   this.errorMessage = 'Please input valid data'
-      //   this.errorColor = 'error'
-      //   this.snackbar = true
-      //   this.isLoading = false
-      // } else {
-      //   this.resetValidation()
+      if (!this.$refs.form.validate()) {
+        this.errorMessage = 'Please input valid data'
+        this.errorColor = 'error'
+        this.snackbar = true
+        this.isLoading = false
+      } else {
+        this.resetValidation()
 
-      //   this.$store.dispatch('auth/postLogin', this.loginInfo)
-      //     .then((response) => {
-      //       this.goToSourceDestination()
-      //     })
-      //     // eslint-disable-next-line handle-callback-err
-      //     .catch((error) => {
-      //       this.errorMessage = 'Invalid Credentials'
-      //       this.errorColor = 'error'
-      //       this.snackbar = true
-      //       // eslint-disable-next-line no-console
-      //       console.log(error)
-      //     })
-      //     .finally(() => {
-      //       this.isLoading = false
-      //     })
-      // }
+        this.$store.dispatch('auth/postLogin', this.loginInfo)
+          .then((response) => {
+            this.$toast.success("You are logged in!");
+            this.goToSourceDestination()
+          })
+          // eslint-disable-next-line handle-callback-err
+          .catch((error) => {
+            this.errorMessage = 'Invalid Credentials'
+            this.errorColor = 'error'
+            this.snackbar = true
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+          .finally(() => {
+            this.isLoading = false
+          })
+      }
     },
 
     checkAuth (next, path) {

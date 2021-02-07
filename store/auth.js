@@ -36,13 +36,13 @@ export const getters = {
 export const mutations = {
   setAuth (state, auth) {
     state.auth = auth
-    Cookie.set(dbazarAuthToken, auth) // saving token in cookie for server rendering
-    localStorage.setItem(dbazarAuthToken, auth)
+    Cookie.set('healthMonitorAuthToken', auth) // saving token in cookie for server rendering
+    localStorage.setItem('healthMonitorAuthToken', auth)
   },
 
   userData (state, userData) {
     state.userData = userData
-    localStorage.setItem(dbazarUserToken, JSON.stringify(userData))
+    localStorage.setItem('healthMonitorUserData', JSON.stringify(userData))
   },
 
   setAccessValidity (state, bool) {
@@ -58,10 +58,10 @@ export const mutations = {
 export const actions = {
   postLogin (context, payload) {
     return this.$axios
-      .post(`/login${loginQuery}`, payload)
+      .post(`/auth/login`, payload)
       .then((response) => {
-        context.commit('setAuth', response.data.accessToken)
-        context.commit('userData', response.data.user)
+        context.commit('setAuth', response.data.access_token)
+        context.commit('userData', response.data)
         return response
       })
       .catch((error) => {
