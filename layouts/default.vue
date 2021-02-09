@@ -69,7 +69,7 @@
 
 <script>
 export default {
-  middleware: ['authentication'],
+  // middleware: ['authentication'],
   data () {
     return {
       clipped: false,

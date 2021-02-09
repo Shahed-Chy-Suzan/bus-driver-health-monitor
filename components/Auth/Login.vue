@@ -1,23 +1,17 @@
 <template>
-  <div >
+  <div>
     <v-card flat outlined class="text-center" align="center">
       <v-toolbar dark class="text-center" flat>
         <v-spacer />
-        <v-toolbar-title
-          class="text-uppercase text-center font-weight-bold"
-        >
+        <v-toolbar-title class="text-uppercase text-center font-weight-bold">
           Admin Login
         </v-toolbar-title>
         <v-spacer />
       </v-toolbar>
       <v-card-text>
-        <v-form
-          ref="form"
-          v-model="valid"
-          lazy-validation
-        >
+        <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>
-            <v-col cols="12" >
+            <v-col cols="12">
               <v-text-field
                 v-model="email"
                 color="secondary"
@@ -52,7 +46,7 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions class="text-center">
-        <v-spacer/>
+        <v-spacer />
         <v-btn
           text
           large
@@ -62,22 +56,13 @@
         >
           Sign in
         </v-btn>
-        <v-spacer/>
+        <v-spacer />
       </v-card-actions>
     </v-card>
-    <v-snackbar
-      v-model="snackbar"
-      :color="errorColor"
-      top
-      right
-    >
+    <v-snackbar v-model="snackbar" :color="errorColor" top right>
       {{ errorMessage }}
       <template>
-        <v-btn
-          color="white"
-          text
-          @click="false"
-        >
+        <v-btn color="white" text @click="false">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </template>
@@ -85,15 +70,17 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
+
+import User from "@/static/helpers/User.js";
 
 export default {
   props: {
     isDialog: {
       type: Boolean,
       required: false,
-      default () {
-        return false
+      default() {
+        return false;
       }
     }
   },
@@ -102,87 +89,97 @@ export default {
     isLoading: false,
     valid: true,
     showPassword: false,
-    email: '',
-    password: '',
-    emailRules: [
-      v => !!v || 'Email is required'
-    ],
+    email: "",
+    password: "",
+    emailRules: [v => !!v || "Email is required"],
 
-    passwordRules: [
-      v => !!v || 'Password is required'
-    ],
+    passwordRules: [v => !!v || "Password is required"],
 
     isLoggedIn: false,
     snackbar: false,
-    errorMessage: '',
-    errorColor: ''
+    errorMessage: "",
+    errorColor: ""
   }),
 
   computed: {
-    ...mapGetters({
-      authToken: 'auth/auth'
-    }),
-    loginInfo () {
+    // ...mapGetters({
+    //   authToken: 'auth/auth'
+    // }),
+    loginInfo() {
       return {
         email: this.email,
         password: this.password
-      }
+      };
     }
   },
+
+  created() {
+    if (User.loggedIn()) {
+      //----------------------
+      this.$router.push("/");
+    }
+  },
+
   methods: {
-    validate () {
-      this.$refs.form.validate()
+    validate() {
+      this.$refs.form.validate();
     },
 
-    resetValidation () {
-      this.$refs.form.resetValidation()
+    resetValidation() {
+      this.$refs.form.resetValidation();
     },
 
-    goToSourceDestination () {
-      if (this.isDialog) {
-        this.$emit('closeAuthentication')
-      } else {
-        this.$router.push('/')
-      }
-    },
+    // goToSourceDestination () {
+    //   if (this.isDialog) {
+    //     this.$emit('closeAuthentication')
+    //   } else {
+    //     this.$router.push('/')
+    //   }
+    // },
 
-    login () {
-      this.isLoading = true
+    login() {
+      this.isLoading = true;
       if (!this.$refs.form.validate()) {
-        this.errorMessage = 'Please input valid data'
-        this.errorColor = 'error'
-        this.snackbar = true
-        this.isLoading = false
+        this.errorMessage = "Please input valid data";
+        this.errorColor = "error";
+        this.snackbar = true;
+        this.isLoading = false;
       } else {
-        this.resetValidation()
+        this.resetValidation();
 
-        this.$store.dispatch('auth/postLogin', this.loginInfo)
-          .then((response) => {
+        // this.$store.dispatch('auth/postLogin', this.loginInfo)
+        this.$axios
+          .post("/auth/login", this.loginInfo)
+          .then(response => {
+            User.responseAfterLogin(response);
             this.$toast.success("You are logged in!");
-            this.goToSourceDestination()
+            // this.goToSourceDestination()
+            this.$router.push("/");
           })
           // eslint-disable-next-line handle-callback-err
-          .catch((error) => {
-            this.errorMessage = 'Invalid Credentials'
-            this.errorColor = 'error'
-            this.snackbar = true
+          .catch(error => {
+            this.errorMessage = "Invalid Credentials";
+            this.errorColor = "error";
+            this.snackbar = true;
             // eslint-disable-next-line no-console
-            console.log(error)
+            console.log(error);
+            console.log(error.response.data);
+            this.$toast.error("Email or Password Invalid");
           })
           .finally(() => {
-            this.isLoading = false
-          })
-      }
-    },
-
-    checkAuth (next, path) {
-      // only admin-group has the access to any property without association
-      if (this.authToken !== null) {
-        this.$router.push('/')
-      } else {
-        this.$router.push('/auth')
+            this.isLoading = false;
+          });
       }
     }
+
+    // checkAuth (next, path) {
+    //   // only admin-group has the access to any property without association
+    //   if (this.authToken !== null) {
+    //     this.$router.push('/')
+    //   } else {
+    //     this.$router.push('/auth')
+    //   }
+    // }
   }
-}
+};
 </script>
