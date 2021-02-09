@@ -15,6 +15,7 @@
 
 <script>
 import Logout from '@/components/Auth/Logout'
+
 export default {
   layout: 'basic',
   name: 'Index',

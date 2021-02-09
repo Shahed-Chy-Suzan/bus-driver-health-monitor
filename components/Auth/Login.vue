@@ -44,19 +44,24 @@
           </v-row>
         </v-form>
       </v-card-text>
-      <v-divider></v-divider>
-      <v-card-actions class="text-center">
-        <v-spacer />
+      <!-- <v-divider></v-divider> -->
+      <v-card-actions class="mb-5">
         <v-btn
           text
-          large
-          color="secondary"
-          :loading="isLoading"
-          @click="login()"
-        >
-          Sign in
+          small
+          class="pl-0 text-capitalize"
+          color="primary"
+          router
+          to="registration"
+        >Create account?
         </v-btn>
         <v-spacer />
+        <v-btn
+          color="primary"
+          :loading="isLoading"
+          @click="login()"
+        >Sign in
+        </v-btn>
       </v-card-actions>
     </v-card>
     <v-snackbar v-model="snackbar" :color="errorColor" top right>
@@ -115,7 +120,6 @@ export default {
 
   created() {
     if (User.loggedIn()) {
-      //----------------------
       this.$router.push("/");
     }
   },
@@ -162,9 +166,9 @@ export default {
             this.errorColor = "error";
             this.snackbar = true;
             // eslint-disable-next-line no-console
-            console.log(error);
-            console.log(error.response.data);
-            this.$toast.error("Email or Password Invalid");
+            // console.log(error);
+            // console.log(error.response.data);
+            // this.$toast.error("Email or Password Invalid");
           })
           .finally(() => {
             this.isLoading = false;

@@ -62,18 +62,23 @@
           </v-row>
         </v-form>
       </v-card-text>
-      <v-card-actions class="text-center">
-        <v-spacer />
+      <v-card-actions class="mb-5">
         <v-btn
           text
-          large
-          color="secondary"
-          :loading="isLoading"
-          @click="login()"
-        >
-          Sign up
+          small
+          class="pl-0 text-capitalize"
+          color="primary"
+          router
+          to="login"
+        >Sign in instead?
         </v-btn>
         <v-spacer />
+        <v-btn
+          color="primary"
+          :loading="isLoading"
+          @click="login()"
+        >Sign up
+        </v-btn>
       </v-card-actions>
     </v-card>
     <v-snackbar
@@ -191,9 +196,9 @@ export default {
             this.errorColor = 'error'
             this.snackbar = true
             // eslint-disable-next-line no-console
-            console.log(error)
-            console.log(error.response.data.errors)
-            this.$toast.error("error.response.data.errors");
+            // console.log(error)
+            // console.log(error.response.data.errors)
+            // this.$toast.error("error.response.data.errors");
 
           })
           .finally(() => {
