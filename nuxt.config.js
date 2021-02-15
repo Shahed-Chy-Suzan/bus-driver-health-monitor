@@ -14,16 +14,28 @@ export default {
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { hid: "description", name: "description", content: "" }
+      { hid: "description", name: "description", content: "" },
     ],
+<<<<<<< HEAD
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
+=======
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+>>>>>>> 3adacefa134c2f18d248d3dd3f3a868bc97c1e80
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [],
 
+  script: [
+    { src: '@/static/helpers/User.js'}
+  ],
+
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ["@/plugins/axios.js", "@/plugins/globalPlugins.js",'@/plugins/googleMaps',],
+  plugins: [
+    "@/plugins/axios.js",
+    "@/plugins/globalPlugins.js",
+    "@/plugins/googleMaps",
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -31,7 +43,7 @@ export default {
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
-    "@nuxtjs/vuetify"
+    "@nuxtjs/vuetify",
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -40,16 +52,23 @@ export default {
     "@nuxtjs/axios",
     // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
-    ['vue-toastification/nuxt', {
-      timeout: 2000,
-      draggable: true,
-      closeOnClick: true
-    }]
+    [
+      "vue-toastification/nuxt",
+      {
+        timeout: 2000,
+        draggable: true,
+        closeOnClick: true,
+      },
+    ],
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
+<<<<<<< HEAD
     baseURL: "http://localhost:8000/api/"
+=======
+    baseURL: "http://localhost:8000/api/",
+>>>>>>> 3adacefa134c2f18d248d3dd3f3a868bc97c1e80
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
@@ -65,12 +84,12 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
+          success: colors.green.accent3,
+        },
+      },
+    },
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {}
+  build: {},
 };
