@@ -16,11 +16,7 @@ export default {
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { hid: "description", name: "description", content: "" },
     ],
-<<<<<<< HEAD
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
-=======
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
->>>>>>> 3adacefa134c2f18d248d3dd3f3a868bc97c1e80
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
@@ -64,11 +60,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-<<<<<<< HEAD
-    baseURL: "http://localhost:8000/api/"
-=======
     baseURL: "http://localhost:8000/api/",
->>>>>>> 3adacefa134c2f18d248d3dd3f3a868bc97c1e80
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
