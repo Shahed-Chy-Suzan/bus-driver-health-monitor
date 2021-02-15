@@ -27,7 +27,6 @@
                 hide-details="auto"
                 required
                 prepend-icon="mdi-account"
-                type="email"
               />
             </v-col>
             <v-col cols="12">
@@ -63,18 +62,23 @@
           </v-row>
         </v-form>
       </v-card-text>
-      <v-card-actions class="text-center">
-        <v-spacer />
+      <v-card-actions class="mb-5">
         <v-btn
           text
-          large
-          color="secondary"
-          :loading="isLoading"
-          @click="login()"
-        >
-          Sign in
+          small
+          class="pl-0 text-capitalize"
+          color="primary"
+          router
+          to="login"
+        >Sign in instead?
         </v-btn>
         <v-spacer />
+        <v-btn
+          color="primary"
+          :loading="isLoading"
+          @click="login()"
+        >Sign up
+        </v-btn>
       </v-card-actions>
     </v-card>
     <v-snackbar
@@ -96,8 +100,10 @@
     </v-snackbar>
   </div>
 </template>
+
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
+import User from "@/static/helpers/User.js";
 
 export default {
   props: {
@@ -114,6 +120,7 @@ export default {
     isLoading: false,
     valid: true,
     showPassword: false,
+    name: '',
     email: '',
     password: '',
     emailRules: [
@@ -130,12 +137,19 @@ export default {
     errorColor: ''
   }),
 
+  created(){
+    if (User.loggedIn()) {
+        this.$router.push('/')
+    }
+  },
+
   computed: {
-    ...mapGetters({
-      authToken: 'auth/auth'
-    }),
+    // ...mapGetters({
+    //   authToken: 'auth/auth'
+    // }),
     loginInfo () {
       return {
+        name: this.name,
         email: this.email,
         password: this.password
       }
@@ -150,13 +164,13 @@ export default {
       this.$refs.form.resetValidation()
     },
 
-    goToSourceDestination () {
-      if (this.isDialog) {
-        this.$emit('closeAuthentication')
-      } else {
-        this.$router.push('/')
-      }
-    },
+    // goToSourceDestination () {
+    //   if (this.isDialog) {
+    //     this.$emit('closeAuthentication')
+    //   } else {
+    //     this.$router.push('/')
+    //   }
+    // },
 
     login () {
       this.isLoading = true
@@ -168,9 +182,13 @@ export default {
       } else {
         this.resetValidation()
 
-        this.$store.dispatch('auth/postLogin', this.loginInfo)
+        // this.$store.dispatch('auth/signup', this.loginInfo)
+        this.$axios.post('/auth/signup',this.loginInfo)
           .then((response) => {
-            this.goToSourceDestination()
+            User.responseAfterLogin(response)
+            this.$toast.success("Registration Successful!");
+            this.$router.push("/");
+            // this.goToSourceDestination()
           })
           // eslint-disable-next-line handle-callback-err
           .catch((error) => {
@@ -178,7 +196,10 @@ export default {
             this.errorColor = 'error'
             this.snackbar = true
             // eslint-disable-next-line no-console
-            console.log(error)
+            // console.log(error)
+            // console.log(error.response.data.errors)
+            // this.$toast.error("error.response.data.errors");
+
           })
           .finally(() => {
             this.isLoading = false
