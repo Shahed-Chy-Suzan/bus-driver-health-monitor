@@ -67,6 +67,26 @@
         {{formatDate(item.date) }}
     </template>
 
+    <template v-slot:item.emergency_button="{ item }">
+      <v-chip
+        :color="!item.emergency_button ? 'red': 'white'"
+        dark
+        small
+      >
+        {{ !item.emergency_button ? 'Driver has an emergency situation' : '' }}
+      </v-chip>
+    </template>
+
+    <template v-slot:item.robery_button="{ item }">
+      <v-chip
+        :color="!item.robery_button ? 'red': 'white'"
+        dark
+        small
+      >
+        {{ !item.robery_button ? 'Driver has a Robery situation' : '' }}
+      </v-chip>
+    </template>
+
     <template v-slot:item.status="{ item }">
       <v-chip
         color= 'red'
@@ -109,8 +129,8 @@ export default {
       { text: "Temperature", value: "temperature" },
       { text: "Emergency Button", value: "emergency_button" },
       { text: "Robery Button", value: "robery_button" },
-      { text: "Latitude", value: "latitude" },
-      { text: "Lomgitude", value: "longitude" },
+      // { text: "Latitude", value: "latitude" },
+      // { text: "Lomgitude", value: "longitude" },
       // { text: "Actions", value: "actions", sortable: false }
     ],
     editedIndex: -1,

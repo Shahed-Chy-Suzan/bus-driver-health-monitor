@@ -34,7 +34,7 @@
                         return="id"
                         outlined
                         hide-details="auto"
-                        label="Driver License"
+                        label="Driver Name"
                       />
                     </v-col>
                     <v-col cols="12" md="12">
@@ -133,9 +133,6 @@
       <v-btn :to="'/bus-driver/profile/' + item.id" class="mr-5" small outlined>
       View
       </v-btn>
-      <v-icon small class="mr-2" @click="editItem(item)">
-        mdi-pencil
-      </v-icon>
       <v-icon small @click="deleteItem(item)">
         mdi-delete
       </v-icon>
@@ -170,14 +167,12 @@ export default {
     editedIndex: -1,
     editedItem: {
       driver_name: null,
-      plate_no: 1,
       channel: null,
       startDate: null,
       driving_status: null
     },
     defaultItem: {
       driver_name: null,
-      plate_no: null,
       channel: null,
       startDate: null,
       driving_status: null

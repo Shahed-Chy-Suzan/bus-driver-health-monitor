@@ -49,7 +49,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: "http://localhost:8000/api/"
+    baseURL: "http://bus-driver-health-monitoring.test/api/"
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)

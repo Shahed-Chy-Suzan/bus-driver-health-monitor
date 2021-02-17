@@ -123,6 +123,26 @@
                                     </v-chip>
                                 </template>
 
+                                <template v-slot:item.emergency_button="{ item }">
+                                    <v-chip
+                                        :color="!item.emergency_button ? 'red': 'white'"
+                                        dark
+                                        small
+                                    >
+                                        {{ !item.emergency_button ? 'Driver has an emergency situation' : '' }}
+                                    </v-chip>
+                                    </template>
+
+                                    <template v-slot:item.robery_button="{ item }">
+                                    <v-chip
+                                        :color="!item.robery_button ? 'red': 'white'"
+                                        dark
+                                        small
+                                    >
+                                        {{ !item.robery_button ? 'Driver has a Robery situation' : '' }}
+                                    </v-chip>
+                                </template>
+
                                 <template v-slot:item.date="{ item }">
                                     {{formatDate(item.date) }}
                                 </template>
